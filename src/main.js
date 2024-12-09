@@ -30,9 +30,9 @@ const API_KEY = '47413156-c8c9abea8f6d88937b7892740';
 const forM = document.querySelector('.feedback-form');
 const loadMoreBtn = document.querySelector('.load-more');
 // console.log(forM);
-let page = 1;
+let page;
 
-async function serviceImg() {
+async function serviceImg(page = 1) {
   const params = new URLSearchParams({
     key: API_KEY,
 
@@ -41,19 +41,24 @@ async function serviceImg() {
     per_page: 15,
     image_type: 'photo',
     orientation: 'horizontal',
-    safesearch: 'true',
+    safesearch: 'true'
   });
   const { data } = await axios(`${BASE_URL}?${params}`);
+  console.log(22);
   return data;
+  
 }
-serviceImg()
+serviceImg(page)
 .then(data => {
   console.log(data);
   gallerY.insertAdjacentHTML("afterbegin", createMarkup(data.hits));
+  loadMoreBtn.classList.replace("load-more-hidden", "load-more")
   lightbox.refresh();
 })
 .catch(error => alert(error.massage)
 )
+console.log(11);
+
 
 
 

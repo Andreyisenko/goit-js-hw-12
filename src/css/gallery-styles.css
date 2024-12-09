@@ -129,5 +129,11 @@ height: 40px;
 border-color: #fff;
 
 background-color: #ff4e4e;;
+margin-left: auto;
+margin-right: auto;
+  }
 
+  
+  .load-more-hidden {
+    display: none;
   }
