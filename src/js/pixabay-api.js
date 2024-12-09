@@ -1,1 +1,5 @@
-// console.log(47);
+// import createMarkup from '/js/render-functions';
+// export default searchData;
+
+
+
