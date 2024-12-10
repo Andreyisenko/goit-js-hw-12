@@ -31,33 +31,42 @@ const forM = document.querySelector('.feedback-form');
 const loadMoreBtn = document.querySelector('.load-more');
 // console.log(forM);
 let page;
+let qData
 
-async function serviceImg(page = 1) {
+forM.addEventListener("submit", handleSubmit)
+
+function handleSubmit(event) {
+  event.preventDefault()
+  qData = event.currentTarget.elements.photo.value.trim()
+  console.log(qData);
+  
+  // serviceImg(`${qData}`)
+
+async function serviceImg(qData) {
   const params = new URLSearchParams({
     key: API_KEY,
 
-    q: `cat`,
+    q: `${qData}`,
     page,
     per_page: 15,
     image_type: 'photo',
     orientation: 'horizontal',
     safesearch: 'true'
-  });
+  })
   const { data } = await axios(`${BASE_URL}?${params}`);
-  console.log(22);
   return data;
   
 }
-serviceImg(page)
+serviceImg(`${qData}`)
 .then(data => {
-  console.log(data);
+  // console.log(data);
   gallerY.insertAdjacentHTML("afterbegin", createMarkup(data.hits));
   loadMoreBtn.classList.replace("load-more-hidden", "load-more")
   lightbox.refresh();
 })
 .catch(error => alert(error.massage)
 )
-console.log(11);
+}
 
 
 
@@ -67,7 +76,6 @@ console.log(11);
 
 
 
-// forM.addEventListener('submit', handleSubmit);
 
 // async function handleSubmit(event) {
 // event.preventDefault();
