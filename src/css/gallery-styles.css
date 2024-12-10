@@ -1,8 +1,5 @@
-
-
-
 body {
-    background-color:antiquewhite
+  background-color: antiquewhite;
 }
 .feedback-form {
   display: flex;
@@ -43,7 +40,7 @@ body {
 }
 
 .gallery {
-  background-color: #fff;
+  background-color: antiquewhite;
   list-style-type: none;
   width: 1440px;
   /* height: 696px; */
@@ -116,24 +113,23 @@ h2 {
   justify-content: space-around;
   border-radius: 20px;
 }
-  .load-more {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-    gap: 10px;
-    border-radius: 8px;
-padding: 8px 16px;
-width: 120px;
-height: 40px;
-border-color: #fff;
+.load-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 10px;
+  border-radius: 8px;
+  padding: 8px 16px;
+  width: 120px;
+  height: 40px;
+  border-color: #fff;
 
-background-color: #ff4e4e;;
-margin-left: auto;
-margin-right: auto;
-  }
+  background-color: #ff4e4e;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-  
-  .load-more-hidden {
-    display: none;
-  }
+.load-more-hidden {
+  display: none;
+}

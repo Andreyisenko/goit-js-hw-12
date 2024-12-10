@@ -34,64 +34,81 @@ loadMoreBtn.addEventListener('click', onLoadMore);
 // forM.addEventListener('submit', handleSubmit);
 
 // function handleSubmit(event) {
-  // event.preventDefault();
-  // qData = event.currentTarget.elements.photo.value.trim();
-  // console.log(qData);
-  // serviceImg(`${qData}`)
-  // if (qData === '') {
-  //   iziToast.show({
-  //     color: 'red',
-  //     position: 'topRight',
-  //     message:
-  //       'Sorry, there are no images matching your search query. Please try again!',
-  //   });
-  //   // spn.classList.remove('is-hidden');
-  //   return;
-  // }
+//   event.preventDefault();
+//   qData = event.currentTarget.elements.photo.value.trim();
+//   // console.log(qData);
+//   searchData(`${qData}`);
 
-  async function serviceImg(qData) {
-    const params = new URLSearchParams({
-      key: API_KEY,
-
-      q: `cat`,
-      page,
-      per_page: 15,
-      image_type: 'photo',
-      orientation: 'horizontal',
-      safesearch: 'true',
+async function searchData(datA) {
+  if (datA === '') {
+    iziToast.show({
+      color: 'red',
+      position: 'topRight',
+      message:
+        'Sorry, there are no images matching your search query. Please try again!',
     });
-    const { data } = await axios(`${BASE_URL}?${params}`);
-    return data;
+    // spn.classList.remove('is-hidden');
+    return;
   }
-  serviceImg(qData)
-    .then(data => {
-      // console.log(data);
-      gallerY.insertAdjacentHTML('afterbegin', createMarkup(data.hits));
+
+  const params = new URLSearchParams({
+    key: API_KEY,
+
+    q: `cad`,
+    page,
+    per_page: 15,
+    image_type: 'photo',
+    orientation: 'horizontal',
+    safesearch: 'true',
+  });
+  const { data } = await axios(`${BASE_URL}?${params}`);
+  return data;
+}
+searchData(qData)
+  .then(data => {
+    // console.log(data);
+    gallerY.insertAdjacentHTML('afterbegin', createMarkup(data.hits));
+
+    if (gallerY.children.length < data.totalHits) {
       loadMoreBtn.classList.replace('load-more-hidden', 'load-more');
-      lightbox.refresh();
-    })
-    .catch(error => alert(error.massage));
+    } 
+      
+    
+
+    lightbox.refresh();
+  })
+  .catch(error => console.log(error.massage));
 // }
-
-
 
 async function onLoadMore() {
   page += 1;
+  loadMoreBtn.disabled = true;
 
   try {
-const datA = await serviceImg(page);
-gallerY.insertAdjacentHTML("beforeend", createMarkup(datA.hits))
-console.log(datA);
-  
-}
-  catch(error) {
-alert(error.massage)
+    const data = await searchData(page);
+    gallerY.insertAdjacentHTML('beforeend', createMarkup(data.hits));
+
+    if (gallerY.children.length >= data.totalHits) {
+      iziToast.show({
+        color: 'blue',
+        position: 'topRight',
+        message: "We're sorry, but you've reached the end of search results.",
+      });
+      loadMoreBtn.classList.replace('load-more', 'load-more-hidden');
+
+    }
+    lightbox.refresh();
+    console.log(data);
+    console.log(data.totalHits);
+    console.log(data.hits.length);
+    console.log(gallerY.children.length);
+
+  } catch (error) {
+    alert(error.massage);
+  }finally {
+    loadMoreBtn.disabled = false;
   }
-  
 }
-
-
-
 
 // async function handleSubmit(event) {
 // event.preventDefault();
