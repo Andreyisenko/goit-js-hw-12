@@ -1,7 +1,6 @@
 // console.log(100);
 import axios from 'axios';
-import createMarkup from './js/render-functions'
-
+import createMarkup from './js/render-functions';
 
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
@@ -10,10 +9,9 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const lightbox = new SimpleLightbox('.gallery a', {
-    captionDelay: 250,
-    captionsData: 'alt',
-  });
- 
+  captionDelay: 250,
+  captionsData: 'alt',
+});
 
 // iziToast.info({
 //   timeout: 3000,
@@ -30,61 +28,67 @@ const API_KEY = '47413156-c8c9abea8f6d88937b7892740';
 const forM = document.querySelector('.feedback-form');
 const loadMoreBtn = document.querySelector('.load-more');
 // console.log(forM);
-let page;
-let qData
+let page = 1;
+let qData;
+loadMoreBtn.addEventListener('click', onLoadMore);
+// forM.addEventListener('submit', handleSubmit);
 
-forM.addEventListener("submit", handleSubmit)
-
-function handleSubmit(event) {
-  event.preventDefault()
-  qData = event.currentTarget.elements.photo.value.trim()
-  console.log(qData);
+// function handleSubmit(event) {
+  // event.preventDefault();
+  // qData = event.currentTarget.elements.photo.value.trim();
+  // console.log(qData);
   // serviceImg(`${qData}`)
-  if (qData === '') {
-    iziToast.show({
-      color: 'red',
-      position: 'topRight',
-      message:
-        'Sorry, there are no images matching your search query. Please try again!',
+  // if (qData === '') {
+  //   iziToast.show({
+  //     color: 'red',
+  //     position: 'topRight',
+  //     message:
+  //       'Sorry, there are no images matching your search query. Please try again!',
+  //   });
+  //   // spn.classList.remove('is-hidden');
+  //   return;
+  // }
+
+  async function serviceImg(qData) {
+    const params = new URLSearchParams({
+      key: API_KEY,
+
+      q: `cat`,
+      page,
+      per_page: 15,
+      image_type: 'photo',
+      orientation: 'horizontal',
+      safesearch: 'true',
     });
-    // spn.classList.remove('is-hidden');
-    return;
+    const { data } = await axios(`${BASE_URL}?${params}`);
+    return data;
   }
+  serviceImg(qData)
+    .then(data => {
+      // console.log(data);
+      gallerY.insertAdjacentHTML('afterbegin', createMarkup(data.hits));
+      loadMoreBtn.classList.replace('load-more-hidden', 'load-more');
+      lightbox.refresh();
+    })
+    .catch(error => alert(error.massage));
+// }
 
-async function serviceImg(qData) {
 
-  
-  const params = new URLSearchParams({
-    key: API_KEY,
 
-    q: `${qData}`,
-    page,
-    per_page: 15,
-    image_type: 'photo',
-    orientation: 'horizontal',
-    safesearch: 'true'
-  })
-  const { data } = await axios(`${BASE_URL}?${params}`);
-  return data;
-  
+async function onLoadMore() {
+  page += 1;
+
+  try {
+const datA = await serviceImg(page);
+gallerY.insertAdjacentHTML("beforeend", createMarkup(datA.hits))
+console.log(datA);
   
 }
-serviceImg(qData)
-.then(data => {
-  // console.log(data);
-  gallerY.insertAdjacentHTML("afterbegin", createMarkup(data.hits));
-  loadMoreBtn.classList.replace("load-more-hidden", "load-more")
-  lightbox.refresh();
-})
-.catch(error => alert(error.massage)
-)
-
+  catch(error) {
+alert(error.massage)
+  }
+  
 }
-
-
-
-
-
 
 
 
