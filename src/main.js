@@ -30,13 +30,12 @@ const loadMoreBtn = document.querySelector('.load-more');
 // console.log(forM);
 let page = 1;
 let qData;
-loadMoreBtn.addEventListener('click', onLoadMore);
-// forM.addEventListener('submit', handleSubmit);
+forM.addEventListener('submit', handleSubmit);
 
-// function handleSubmit(event) {
-//   event.preventDefault();
-//   qData = event.currentTarget.elements.photo.value.trim();
-//   // console.log(qData);
+function handleSubmit(event) {
+  event.preventDefault();
+  qData = event.currentTarget.elements.photo.value.trim();
+  console.log(qData);
 //   searchData(`${qData}`);
 
 async function searchData(datA) {
@@ -54,7 +53,7 @@ async function searchData(datA) {
   const params = new URLSearchParams({
     key: API_KEY,
 
-    q: `caT`,
+    q: qData,
     page,
     per_page: 15,
     image_type: 'photo',
@@ -80,6 +79,7 @@ searchData(qData)
   .catch(error => console.log(error.massage));
 // }
 
+loadMoreBtn.addEventListener('click', onLoadMore);
 async function onLoadMore() {
   page += 1;
   loadMoreBtn.disabled = true;
@@ -134,3 +134,5 @@ window.scrollBy({
 // .then ((res)=> console.log(res)
 
 // )
+}
+
