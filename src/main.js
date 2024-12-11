@@ -54,7 +54,7 @@ async function searchData(datA) {
   const params = new URLSearchParams({
     key: API_KEY,
 
-    q: `cad`,
+    q: `caT`,
     page,
     per_page: 15,
     image_type: 'photo',
@@ -97,6 +97,15 @@ async function onLoadMore() {
       loadMoreBtn.classList.replace('load-more', 'load-more-hidden');
 
     }
+const card = document.querySelector(".gallery-item");
+console.log(card.getBoundingClientRect().height);
+const cardHeight = card.getBoundingClientRect().height
+window.scrollBy({
+  left: 0,
+  top: cardHeight * 2,
+  behavior: "smooth"
+})
+
     lightbox.refresh();
     console.log(data);
     console.log(data.totalHits);
