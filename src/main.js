@@ -13,15 +13,6 @@ const lightbox = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
 });
 
-// iziToast.info({
-//   timeout: 3000,
-//   title: 'Hello',
-//   position: 'center',
-//   message: 'Welcome!',
-// //   backgroundColor: 'green',
-//   titleColor: 'red',
-//   Width: 200,
-// });
 const gallerY = document.querySelector('.gallery');
 const BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = '47413156-c8c9abea8f6d88937b7892740';
@@ -29,7 +20,7 @@ const forM = document.querySelector('.feedback-form');
 const loadMoreBtn = document.querySelector('.load-more');
 let spn = document.querySelector('.loader');
 let page = 1;
-
+let totalHitsData;
 let qData;
 
 forM.addEventListener('submit', handleSubmit);
@@ -66,6 +57,8 @@ function handleSubmit(event) {
   }
   searchData(qData)
     .then(data => {
+      totalHitsData = data.totalHits;
+
       if (!data.hits.length) {
         iziToast.show({
           color: 'red',
@@ -86,6 +79,9 @@ function handleSubmit(event) {
       if (gallerY.children.length < data.totalHits) {
         loadMoreBtn.classList.replace('load-more-hidden', 'load-more');
       }
+      if (gallerY.children.length >= totalHitsData) {
+        loadMoreBtn.classList.replace('load-more', 'load-more-hidden');
+      }
 
       lightbox.refresh();
     })
@@ -103,13 +99,13 @@ function handleSubmit(event) {
   loadMoreBtn.addEventListener('click', onLoadMore);
   async function onLoadMore() {
     page += 1;
-    console.log(qData);
 
     loadMoreBtn.disabled = true;
 
     try {
       spn.classList.remove('is-hidden');
       const data = await searchData(page);
+
       gallerY.insertAdjacentHTML('beforeend', createMarkup(data.hits));
 
       if (gallerY.children.length >= data.totalHits) {
@@ -121,7 +117,6 @@ function handleSubmit(event) {
         loadMoreBtn.classList.replace('load-more', 'load-more-hidden');
       }
       const card = document.querySelector('.gallery-item');
-      // console.log(card.getBoundingClientRect().height);
       const cardHeight = card.getBoundingClientRect().height;
       window.scrollBy({
         left: 0,
@@ -140,25 +135,8 @@ function handleSubmit(event) {
 
       spn.classList.remove('is-hidden');
     } finally {
-      console.log(page);
       forM.reset();
       loadMoreBtn.disabled = false;
     }
   }
-
-  // async function handleSubmit(event) {
-  // event.preventDefault();
-
-  //   const params = new URLSearchParams({
-  //     key: API_KEY,
-
-  //     q: 'cat',
-  //     image_type: 'photo',
-  //     orientation: 'horizontal',
-  //     safesearch: 'true',
-  //   });
-  //   axios(`https://pixabay.com/api/?${params}`)
-  // .then ((res)=> console.log(res)
-
-  // )
 }
