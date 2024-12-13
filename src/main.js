@@ -13,11 +13,11 @@ const lightbox = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
 });
 
+const loadMoreBtn = document.querySelector('.load-more');
 const gallerY = document.querySelector('.gallery');
 const BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = '47413156-c8c9abea8f6d88937b7892740';
 const forM = document.querySelector('.feedback-form');
-const loadMoreBtn = document.querySelector('.load-more');
 let spn = document.querySelector('.loader');
 let page = 1;
 let totalHitsData;
@@ -36,12 +36,14 @@ function handleSubmit(event) {
       color: 'red',
       position: 'topRight',
       message:
-        'Sorry, there are no images matching your search query. Please try again!',
+      'Sorry, there are no images matching your search query. Please try again!',
     });
     spn.classList.remove('is-hidden');
     return;
   }
+  
   async function searchData() {
+    loadMoreBtn.addEventListener('click', onLoadMore);
     const params = new URLSearchParams({
       key: API_KEY,
 
@@ -95,8 +97,7 @@ function handleSubmit(event) {
       spn.classList.remove('is-hidden');
       return;
     });
-
-  loadMoreBtn.addEventListener('click', onLoadMore);
+    
   async function onLoadMore() {
     page += 1;
 
@@ -129,9 +130,9 @@ function handleSubmit(event) {
       iziToast.show({
         color: 'red',
         position: 'center',
-        message: `${error}`,
+        message: `${error.message}`,
       });
-      console.log(error);
+      console.log(error.message);
 
       spn.classList.remove('is-hidden');
     } finally {
@@ -140,3 +141,4 @@ function handleSubmit(event) {
     }
   }
 }
+// loadMoreBtn.addEventListener('click', onLoadMore);
